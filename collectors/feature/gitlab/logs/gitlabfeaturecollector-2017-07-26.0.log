@@ -1,0 +1,11 @@
+2017-07-26 05:21:29,115 INFO  c.c.d.collector.CollectorTask - -----------------------------------
+2017-07-26 05:21:29,120 INFO  c.c.d.collector.CollectorTask - Starting...
+2017-07-26 05:21:29,120 INFO  c.c.d.collector.CollectorTask - -----------------------------------
+2017-07-26 05:21:29,288 INFO  c.c.d.collector.CollectorTask - Issues Added/Updated    1        0s
+2017-07-26 05:21:29,289 INFO  c.c.d.collector.CollectorTask - Issues Deleted          1        0s
+2017-07-26 05:21:29,329 INFO  c.c.d.collector.CollectorTask - -----------------------------------
+2017-07-26 05:21:29,329 INFO  c.c.d.collector.CollectorTask - Starting...
+2017-07-26 05:21:29,329 INFO  c.c.d.collector.CollectorTask - -----------------------------------
+2017-07-26 05:21:29,330 ERROR c.c.d.collector.FeatureCollectorTask - null
+2017-07-26 05:21:29,330 INFO  c.c.d.collector.CollectorTask - Issues Added/Updated    0        0s
+2017-07-26 05:21:29,330 INFO  c.c.d.collector.CollectorTask - Issues Deleted          0        0s

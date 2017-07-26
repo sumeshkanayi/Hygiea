@@ -1,0 +1,7 @@
+/vagrant/sw/Hygiea/collectors/feature/gitlab/src/test/java/com/capitalone/dashboard/collector/FeatureCollectorTaskTest.java
+/vagrant/sw/Hygiea/collectors/feature/gitlab/src/test/java/com/capitalone/dashboard/collector/FeatureServiceTest.java
+/vagrant/sw/Hygiea/collectors/feature/gitlab/src/test/java/com/capitalone/dashboard/gitlab/GitlabUriUtilityTest.java
+/vagrant/sw/Hygiea/collectors/feature/gitlab/src/test/java/com/capitalone/dashboard/ApplicationConfigTest.java
+/vagrant/sw/Hygiea/collectors/feature/gitlab/src/test/java/com/capitalone/dashboard/data/FeatureDataMapperTest.java
+/vagrant/sw/Hygiea/collectors/feature/gitlab/src/test/java/com/capitalone/dashboard/gitlab/DefaultGitlabClientTest.java
+/vagrant/sw/Hygiea/collectors/feature/gitlab/src/test/java/com/capitalone/dashboard/data/DefaultFeatureDataClientTest.java

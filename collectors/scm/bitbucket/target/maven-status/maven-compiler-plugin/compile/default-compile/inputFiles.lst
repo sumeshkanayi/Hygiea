@@ -1,0 +1,9 @@
+/vagrant/sw/Hygiea/collectors/scm/bitbucket/src/main/java/com/capitalone/dashboard/collector/GitCollectorTask.java
+/vagrant/sw/Hygiea/collectors/scm/bitbucket/src/main/java/com/capitalone/dashboard/collector/DefaultBitbucketServerClient.java
+/vagrant/sw/Hygiea/collectors/scm/bitbucket/src/main/java/com/capitalone/dashboard/repository/GitRepoRepository.java
+/vagrant/sw/Hygiea/collectors/scm/bitbucket/src/main/java/com/capitalone/dashboard/model/GitRepo.java
+/vagrant/sw/Hygiea/collectors/scm/bitbucket/src/main/java/com/capitalone/dashboard/Application.java
+/vagrant/sw/Hygiea/collectors/scm/bitbucket/src/main/java/com/capitalone/dashboard/collector/RestOperationsSupplier.java
+/vagrant/sw/Hygiea/collectors/scm/bitbucket/src/main/java/com/capitalone/dashboard/collector/DefaultBitbucketCloudClient.java
+/vagrant/sw/Hygiea/collectors/scm/bitbucket/src/main/java/com/capitalone/dashboard/collector/GitClient.java
+/vagrant/sw/Hygiea/collectors/scm/bitbucket/src/main/java/com/capitalone/dashboard/collector/GitSettings.java

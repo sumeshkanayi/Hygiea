@@ -1,0 +1,11 @@
+/vagrant/sw/Hygiea/collectors/scm/gitlab/src/main/java/com/capitalone/dashboard/collector/GitlabSettings.java
+/vagrant/sw/Hygiea/collectors/scm/gitlab/src/main/java/com/capitalone/dashboard/gitlab/GitlabGitClient.java
+/vagrant/sw/Hygiea/collectors/scm/gitlab/src/main/java/com/capitalone/dashboard/gitlab/model/GitlabCommit.java
+/vagrant/sw/Hygiea/collectors/scm/gitlab/src/main/java/com/capitalone/dashboard/repository/GitlabGitCollectorRepository.java
+/vagrant/sw/Hygiea/collectors/scm/gitlab/src/main/java/com/capitalone/dashboard/collector/RestOperationsSupplier.java
+/vagrant/sw/Hygiea/collectors/scm/gitlab/src/main/java/com/capitalone/dashboard/gitlab/DefaultGitlabGitClient.java
+/vagrant/sw/Hygiea/collectors/scm/gitlab/src/main/java/com/capitalone/dashboard/model/GitlabGitRepo.java
+/vagrant/sw/Hygiea/collectors/scm/gitlab/src/main/java/com/capitalone/dashboard/collector/GitlabGitCollectorTask.java
+/vagrant/sw/Hygiea/collectors/scm/gitlab/src/main/java/com/capitalone/dashboard/gitlab/GitlabCommitsResponseMapper.java
+/vagrant/sw/Hygiea/collectors/scm/gitlab/src/main/java/com/capitalone/dashboard/gitlab/GitlabUrlUtility.java
+/vagrant/sw/Hygiea/collectors/scm/gitlab/src/main/java/com/capitalone/dashboard/Application.java

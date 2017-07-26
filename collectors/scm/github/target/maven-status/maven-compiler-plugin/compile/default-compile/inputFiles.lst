@@ -1,0 +1,8 @@
+/vagrant/sw/Hygiea/collectors/scm/github/src/main/java/com/capitalone/dashboard/collector/GitHubClient.java
+/vagrant/sw/Hygiea/collectors/scm/github/src/main/java/com/capitalone/dashboard/collector/DefaultGitHubClient.java
+/vagrant/sw/Hygiea/collectors/scm/github/src/main/java/com/capitalone/dashboard/model/GitHubRepo.java
+/vagrant/sw/Hygiea/collectors/scm/github/src/main/java/com/capitalone/dashboard/Application.java
+/vagrant/sw/Hygiea/collectors/scm/github/src/main/java/com/capitalone/dashboard/collector/GitHubSettings.java
+/vagrant/sw/Hygiea/collectors/scm/github/src/main/java/com/capitalone/dashboard/collector/GitHubCollectorTask.java
+/vagrant/sw/Hygiea/collectors/scm/github/src/main/java/com/capitalone/dashboard/collector/RestOperationsSupplier.java
+/vagrant/sw/Hygiea/collectors/scm/github/src/main/java/com/capitalone/dashboard/repository/GitHubRepoRepository.java

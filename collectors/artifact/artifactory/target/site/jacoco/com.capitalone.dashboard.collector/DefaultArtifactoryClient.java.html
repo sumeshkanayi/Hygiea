@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DefaultArtifactoryClient.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.capitalone.dashboard:artifactory-artifact-collector</a> &gt; <a href="index.source.html" class="el_package">com.capitalone.dashboard.collector</a> &gt; <span class="el_source">DefaultArtifactoryClient.java</span></div><h1>DefaultArtifactoryClient.java</h1><pre class="source lang-java linenums">package com.capitalone.dashboard.collector;
+
+import java.nio.charset.StandardCharsets;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestOperations;
+
+import com.capitalone.dashboard.model.ArtifactoryRepo;
+import com.capitalone.dashboard.model.BinaryArtifact;
+import com.capitalone.dashboard.util.ArtifactUtil;
+import com.capitalone.dashboard.util.Supplier;
+
+@Component
+public class DefaultArtifactoryClient implements ArtifactoryClient {
+<span class="fc" id="L38">	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultArtifactoryClient.class);</span>
+	
+	private static final String REPOS_URL_SUFFIX = &quot;api/repositories&quot;;
+	private static final String AQL_URL_SUFFIX = &quot;api/search/aql&quot;;
+	
+<span class="fc" id="L43">	private final DateFormat FULL_DATE = new SimpleDateFormat(&quot;yyyy-MM-dd'T'HH:mm:ss.SSSX&quot;);</span>
+	
+	private final ArtifactorySettings artifactorySettings;
+	private final RestOperations restOperations;
+	
+	private final List&lt;Pattern&gt; artifactPatterns;
+	
+	@Autowired
+<span class="fc" id="L51">	public DefaultArtifactoryClient(ArtifactorySettings artifactorySettings, Supplier&lt;RestOperations&gt; restOperationsSupplier) {</span>
+<span class="fc" id="L52">        this.artifactorySettings = artifactorySettings;</span>
+<span class="fc" id="L53">        this.restOperations = restOperationsSupplier.get();</span>
+<span class="fc" id="L54">        this.artifactPatterns = new ArrayList&lt;&gt;();</span>
+        
+<span class="pc bpc" id="L56" title="1 of 2 branches missed.">        if (artifactorySettings.getPatterns() != null) {</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">	        for (String str : artifactorySettings.getPatterns()) {</span>
+	        	try {
+<span class="fc" id="L59">		        	Pattern p = Pattern.compile(str);</span>
+		        	
+<span class="fc" id="L61">		        	LOGGER.info(&quot;Adding Pattern &quot; + p.pattern());</span>
+		        	
+<span class="fc" id="L63">		        	artifactPatterns.add(p);</span>
+<span class="nc" id="L64">	        	} catch (PatternSyntaxException e) {</span>
+<span class="nc" id="L65">	        		LOGGER.error(&quot;Invalid pattern: &quot; + e.getMessage());</span>
+<span class="nc" id="L66">	        		throw e;</span>
+<span class="fc" id="L67">	        	}</span>
+<span class="fc" id="L68">	        }</span>
+        }
+        
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">        if (artifactPatterns.isEmpty()) {</span>
+<span class="nc" id="L72">        	throw new IllegalStateException(&quot;No valid artifact patterns configured. Aborting.&quot;);</span>
+        }
+<span class="fc" id="L74">	}</span>
+	
+	public List&lt;ArtifactoryRepo&gt; getRepos(String instanceUrl) {
+<span class="fc" id="L77">		List&lt;ArtifactoryRepo&gt; result = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L78">		ResponseEntity&lt;String&gt; responseEntity = makeRestCall(instanceUrl, REPOS_URL_SUFFIX);</span>
+<span class="fc" id="L79">		String returnJSON = responseEntity.getBody();</span>
+<span class="fc" id="L80">        JSONParser parser = new JSONParser();</span>
+
+        try {
+<span class="fc" id="L83">        	JSONArray jsonRepos = (JSONArray) parser.parse(returnJSON);</span>
+
+<span class="fc bfc" id="L85" title="All 2 branches covered.">            for (Object repo : jsonRepos) {</span>
+<span class="fc" id="L86">                JSONObject jsonRepo = (JSONObject) repo;</span>
+
+<span class="fc" id="L88">                final String repoName = getString(jsonRepo, &quot;key&quot;);</span>
+<span class="fc" id="L89">                final String repoURL = getString(jsonRepo, &quot;url&quot;);</span>
+<span class="fc" id="L90">                LOGGER.debug(&quot;repoName:&quot; + repoName);</span>
+<span class="fc" id="L91">                LOGGER.debug(&quot;repoURL: &quot; + repoURL);</span>
+<span class="fc" id="L92">                ArtifactoryRepo artifactoryRepo = new ArtifactoryRepo();</span>
+<span class="fc" id="L93">                artifactoryRepo.setInstanceUrl(instanceUrl);</span>
+<span class="fc" id="L94">                artifactoryRepo.setRepoName(repoName);</span>
+<span class="fc" id="L95">                artifactoryRepo.setRepoUrl(repoURL);</span>
+                
+                // add the repo
+<span class="fc" id="L98">                result.add(artifactoryRepo);</span>
+<span class="fc" id="L99">            }</span>
+<span class="nc" id="L100">        } catch (ParseException e) {</span>
+<span class="nc" id="L101">            LOGGER.error(&quot;Parsing repos on instance: &quot; + instanceUrl, e);</span>
+<span class="fc" id="L102">        }		</span>
+		
+<span class="fc" id="L104">		return result;</span>
+	}
+	
+	public List&lt;BinaryArtifact&gt; getArtifacts(String instanceUrl, String repoName, long lastUpdated) {
+<span class="fc" id="L108">		List&lt;BinaryArtifact&gt; result = new ArrayList&lt;&gt;();</span>
+		
+		// get the list of artifacts
+<span class="pc bpc" id="L111" title="2 of 4 branches missed.">		if (StringUtils.isNotEmpty(instanceUrl) &amp;&amp; StringUtils.isNotEmpty(repoName)) {</span>
+<span class="fc" id="L112">			String body = &quot;items.find({\&quot;modified\&quot; : {\&quot;$gt\&quot; : \&quot;&quot; + FULL_DATE.format(new Date(lastUpdated))</span>
+					+ &quot;\&quot;},\&quot;repo\&quot;:{\&quot;$eq\&quot;:\&quot;&quot; + repoName
+					+ &quot;\&quot;}}).include(\&quot;repo\&quot;, \&quot;name\&quot;, \&quot;path\&quot;, \&quot;created\&quot;, \&quot;modified\&quot;, \&quot;property\&quot;)&quot;;
+			
+<span class="fc" id="L116">			ResponseEntity&lt;String&gt; responseEntity = makeRestPost(instanceUrl, AQL_URL_SUFFIX, body);</span>
+<span class="fc" id="L117">			String returnJSON = responseEntity.getBody();</span>
+<span class="fc" id="L118">	        JSONParser parser = new JSONParser();</span>
+	        
+	        try {
+<span class="fc" id="L121">	        	JSONObject json = (JSONObject) parser.parse(returnJSON);</span>
+<span class="fc" id="L122">	        	JSONArray jsonArtifacts = getJsonArray(json, &quot;results&quot;);</span>
+<span class="fc bfc" id="L123" title="All 2 branches covered.">	            for (Object artifact : jsonArtifacts) {</span>
+<span class="fc" id="L124">	                JSONObject jsonArtifact = (JSONObject) artifact;</span>
+
+<span class="fc" id="L126">	                final String artifactCanonicalName = getString(jsonArtifact, &quot;name&quot;);</span>
+<span class="fc" id="L127">	                String artifactPath = getString(jsonArtifact, &quot;path&quot;);</span>
+<span class="pc bpc" id="L128" title="1 of 2 branches missed.">	                if (artifactPath.charAt(artifactPath.length()-1) == '/') {</span>
+<span class="nc" id="L129">	                	artifactPath = artifactPath.substring(0, artifactPath.length()-1);</span>
+	                }
+<span class="fc" id="L131">	                String sTimestamp = getString(jsonArtifact, &quot;modified&quot;);</span>
+<span class="pc bpc" id="L132" title="1 of 2 branches missed.">	                if (sTimestamp == null) {</span>
+<span class="nc" id="L133">	                	sTimestamp = getString(jsonArtifact, &quot;created&quot;);</span>
+	                }
+<span class="fc" id="L135">	                long timestamp = 0;</span>
+<span class="pc bpc" id="L136" title="1 of 2 branches missed.">	                if (sTimestamp != null) {</span>
+						try {
+<span class="fc" id="L138">							Date date = FULL_DATE.parse(sTimestamp);</span>
+<span class="fc" id="L139">							timestamp = date.getTime();</span>
+<span class="nc" id="L140">						} catch (java.text.ParseException e) {</span>
+<span class="nc" id="L141">							LOGGER.error(&quot;Parsing artifact timestamp: &quot; + sTimestamp, e);</span>
+<span class="fc" id="L142">						}</span>
+	                }
+<span class="fc" id="L144">	                BinaryArtifact ba = createArtifact(artifactCanonicalName, artifactPath, timestamp, jsonArtifact);</span>
+<span class="pc bpc" id="L145" title="1 of 2 branches missed.">	                if (ba != null) {</span>
+<span class="fc" id="L146">	                	result.add(ba);</span>
+	                }
+<span class="fc" id="L148">	            }</span>
+<span class="nc" id="L149">	        } catch (ParseException e) {</span>
+<span class="nc" id="L150">	            LOGGER.error(&quot;Parsing artifacts on instance: &quot; + instanceUrl + &quot; and repo: &quot; + repoName, e);</span>
+<span class="fc" id="L151">	        }</span>
+		}
+			
+<span class="fc" id="L154">		return result;</span>
+	}
+	
+	/**
+	 * Creates an artifact given its canonical name and path.
+	 * Artifacts are created by supplied pattern configurations. By default three are supplied:
+	 * 1. Maven artifacts:
+	 * 		[org]/[module]/[version]/[module]-[version]([-classifier])(.[ext])
+	 * 2. Ivy artifacts:
+	 * 		(a) [org]/[module]/[revision]/[type]/[artifact]-[revision](-[classifier])(.[ext])
+	 * 		(b) [org]/[module]/[revision]/ivy-[revision](-[classifier]).xml
+	 * 
+	 * Using these patterns, we extract the artifact name, version and group id from the canonical name and path.
+	 * 
+	 * @param artifactCanonicalName			artifact's canonical name in artifactory
+	 * @param artifactPath					artifact's path in artifactory
+	 * @param timestamp						the artifact's timestamp
+	 * @param jsonArtifact 					the artifact metadata is extracted from here
+	 * @return
+	 */
+	private BinaryArtifact createArtifact(String artifactCanonicalName, String artifactPath, long timestamp, JSONObject jsonArtifact) {
+<span class="fc" id="L175">		BinaryArtifact result = null;</span>
+<span class="fc" id="L176">		String fullPath = artifactPath + &quot;/&quot; + artifactCanonicalName;</span>
+		
+<span class="fc" id="L178">		int idx = 0;</span>
+<span class="pc bpc" id="L179" title="1 of 2 branches missed.">		for (Pattern pattern : artifactPatterns) {</span>
+<span class="fc" id="L180">			result = ArtifactUtil.parse(pattern, fullPath);</span>
+			
+<span class="fc bfc" id="L182" title="All 2 branches covered.">			if (result != null) {</span>
+<span class="pc bpc" id="L183" title="1 of 2 branches missed.">				if (LOGGER.isDebugEnabled()) {</span>
+<span class="nc" id="L184">					LOGGER.debug(&quot;Artifact at &quot; + fullPath + &quot; matched pattern &quot; + idx);</span>
+				}
+				
+<span class="fc" id="L187">				result.setCanonicalName(artifactCanonicalName);</span>
+<span class="fc" id="L188">				result.setTimestamp(timestamp);</span>
+<span class="fc" id="L189">				addMetadataToArtifact(result, jsonArtifact);</span>
+				
+<span class="fc" id="L191">				return result;</span>
+			}
+			
+<span class="fc" id="L194">			idx++;</span>
+<span class="fc" id="L195">		}</span>
+		
+<span class="nc bnc" id="L197" title="All 2 branches missed.">		if (LOGGER.isDebugEnabled()) {</span>
+<span class="nc" id="L198">			LOGGER.debug(&quot;Artifact at &quot; + fullPath + &quot; did not match any patterns.&quot;);</span>
+		}
+<span class="nc" id="L200">		return null;</span>
+	}
+	
+	@SuppressWarnings(&quot;PMD.AvoidDeeplyNestedIfStmts&quot;)
+	private void addMetadataToArtifact(BinaryArtifact ba, JSONObject jsonArtifact) {
+<span class="pc bpc" id="L205" title="2 of 4 branches missed.">		if (ba != null &amp;&amp; jsonArtifact != null) {</span>
+<span class="fc" id="L206">        	JSONArray jsonProperties = getJsonArray(jsonArtifact, &quot;properties&quot;);</span>
+<span class="fc bfc" id="L207" title="All 2 branches covered.">        	for (Object property : jsonProperties) {</span>
+<span class="fc" id="L208">        		JSONObject jsonProperty = (JSONObject) property;</span>
+<span class="fc" id="L209">        		String key = getString(jsonProperty, &quot;key&quot;);</span>
+<span class="fc" id="L210">        		String value = getString(jsonProperty, &quot;value&quot;);</span>
+<span class="pc bpc" id="L211" title="58 of 82 branches missed.">        		switch (key) {</span>
+            		case &quot;build.url&quot;:
+            		case &quot;build_url&quot;:
+            		case &quot;buildUrl&quot;:
+<span class="fc" id="L215">            			ba.setBuildUrl(value);</span>
+<span class="fc" id="L216">            			break;</span>
+            		case &quot;build.number&quot;:
+            		case &quot;build_number&quot;:
+            		case &quot;buildNumber&quot;:
+<span class="fc" id="L220">            			ba.setBuildNumber(value);</span>
+<span class="fc" id="L221">            			break;</span>
+            		case &quot;job.url&quot;:
+            		case &quot;job_url&quot;:
+            		case &quot;jobUrl&quot;:
+<span class="fc" id="L225">            			ba.setJobUrl(value);</span>
+<span class="fc" id="L226">            			break;</span>
+            		case &quot;job.name&quot;:
+            		case &quot;job_name&quot;:
+            		case &quot;jobName&quot;:
+<span class="fc" id="L230">            			ba.setJobName(value);</span>
+<span class="fc" id="L231">            			break;</span>
+            		case &quot;instance.url&quot;:
+            		case &quot;instance_url&quot;:
+            		case &quot;instanceUrl&quot;:
+<span class="fc" id="L235">            			ba.setInstanceUrl(value);</span>
+<span class="fc" id="L236">            			break;</span>
+            		case &quot;vcs.url&quot;:
+            		case &quot;vcs_url&quot;:
+            		case &quot;vcsUrl&quot;:
+<span class="fc" id="L240">            			ba.setScmUrl(value);</span>
+<span class="fc" id="L241">            			break;</span>
+            		case &quot;vcs.branch&quot;:
+            		case &quot;vcs_branch&quot;:
+            		case &quot;vcsBranch&quot;:
+<span class="fc" id="L245">            			ba.setScmBranch(value);</span>
+<span class="fc" id="L246">            			break;</span>
+            		case &quot;vcs.revision&quot;:
+            		case &quot;vcs_revision&quot;:
+            		case &quot;vcsRevision&quot;:
+<span class="fc" id="L250">            			ba.setScmRevisionNumber(value);</span>
+<span class="fc" id="L251">            			break;</span>
+            		default:
+            			// MongoDB doesn't allow dots in keys. So we handle it by converting 
+            			// the letter following it to uppercase, and ignoring the dot.
+<span class="nc bnc" id="L255" title="All 2 branches missed.">            			if (key.contains(&quot;.&quot;)) {</span>
+<span class="nc" id="L256">            				StringBuilder newKey = new StringBuilder();</span>
+<span class="nc" id="L257">            				char prevChar = 0;</span>
+<span class="nc bnc" id="L258" title="All 2 branches missed.">            				for (char c : key.toCharArray()) {</span>
+<span class="nc bnc" id="L259" title="All 2 branches missed.">            					if (c != '.') {</span>
+<span class="nc bnc" id="L260" title="All 2 branches missed.">            						if (prevChar == '.') {</span>
+<span class="nc" id="L261">            							c = Character.toUpperCase(c);</span>
+            						}
+<span class="nc" id="L263">            						newKey.append(c);</span>
+            					}
+<span class="nc" id="L265">            					prevChar = c;</span>
+            				}
+<span class="nc" id="L267">            				key = newKey.toString();</span>
+            			}
+<span class="nc bnc" id="L269" title="All 2 branches missed.">            			if (StringUtils.isNotEmpty(key)) {</span>
+<span class="nc" id="L270">            				ba.getMetadata().put(key, value);</span>
+            			}
+            			break;
+        		}
+<span class="fc" id="L274">        	}</span>
+        }
+<span class="fc" id="L276">	}</span>
+	
+    // ////// Helpers
+	
+    private ResponseEntity&lt;String&gt; makeRestCall(String instanceUrl, String suffix) {
+<span class="fc" id="L281">    	ResponseEntity&lt;String&gt; response = null;</span>
+        try {
+<span class="fc" id="L283">            response = restOperations.exchange(joinUrl(instanceUrl, artifactorySettings.getEndpoint(), suffix), HttpMethod.GET,</span>
+<span class="fc" id="L284">                    new HttpEntity&lt;&gt;(createHeaders(instanceUrl)), String.class);</span>
+
+<span class="nc" id="L286">        } catch (RestClientException re) {</span>
+<span class="nc" id="L287">            LOGGER.error(&quot;Error with REST url: &quot; + joinUrl(instanceUrl, artifactorySettings.getEndpoint(), suffix));</span>
+<span class="nc" id="L288">            LOGGER.error(re.getMessage());</span>
+<span class="fc" id="L289">        }</span>
+<span class="fc" id="L290">        return response;</span>
+    }
+    
+    private ResponseEntity&lt;String&gt; makeRestPost(String instanceUrl, String suffix, Object body) {
+<span class="fc" id="L294">        ResponseEntity&lt;String&gt; response = null;</span>
+        try {
+<span class="fc" id="L296">        	HttpHeaders headers = createHeaders(instanceUrl);</span>
+<span class="fc" id="L297">        	headers.setContentType(MediaType.APPLICATION_JSON);</span>
+<span class="fc" id="L298">            response = restOperations.exchange(joinUrl(instanceUrl, artifactorySettings.getEndpoint(), suffix), HttpMethod.POST,</span>
+                    new HttpEntity&lt;&gt;(body, headers), String.class);
+
+<span class="nc" id="L301">        } catch (RestClientException re) {</span>
+<span class="nc" id="L302">            LOGGER.error(&quot;Error with REST url: &quot; + joinUrl(instanceUrl, artifactorySettings.getEndpoint(), suffix));</span>
+<span class="nc" id="L303">            LOGGER.error(re.getMessage());</span>
+<span class="fc" id="L304">        }</span>
+<span class="fc" id="L305">        return response;</span>
+    }
+    
+    // join a base url to another path or paths - this will handle trailing or non-trailing /'s
+    private String joinUrl(String url, String... paths) {
+<span class="fc" id="L310">    	StringBuilder result = new StringBuilder(url);</span>
+<span class="fc bfc" id="L311" title="All 2 branches covered.">    	for (String path : paths) {</span>
+<span class="fc bfc" id="L312" title="All 2 branches covered.">    		if (path != null) {</span>
+<span class="fc" id="L313">	            String p = path.replaceFirst(&quot;^(\\/)+&quot;, &quot;&quot;);</span>
+<span class="pc bpc" id="L314" title="1 of 2 branches missed.">		    	if (result.lastIndexOf(&quot;/&quot;) != result.length() - 1) {</span>
+<span class="nc" id="L315">		            result.append('/');</span>
+		        }
+<span class="fc" id="L317">		    	result.append(p);</span>
+    		}
+    	}
+<span class="fc" id="L320">        return result.toString();</span>
+    }
+    
+    protected HttpHeaders createHeaders(String instanceUrl) {
+<span class="fc" id="L324">    	HttpHeaders headers = new HttpHeaders();</span>
+<span class="fc" id="L325">    	List&lt;String&gt; servers = this.artifactorySettings.getServers();</span>
+<span class="fc" id="L326">    	List&lt;String&gt; usernames = this.artifactorySettings.getUsernames();</span>
+<span class="fc" id="L327">    	List&lt;String&gt; apiKeys = this.artifactorySettings.getApiKeys();</span>
+<span class="pc bpc" id="L328" title="4 of 6 branches missed.">    	if (CollectionUtils.isNotEmpty(servers) &amp;&amp; CollectionUtils.isNotEmpty(usernames) &amp;&amp; CollectionUtils.isNotEmpty(apiKeys)) {</span>
+<span class="nc bnc" id="L329" title="All 2 branches missed.">    		for (int i = 0; i &lt; servers.size(); i++) {</span>
+<span class="nc bnc" id="L330" title="All 4 branches missed.">        		if (servers.get(i) != null &amp;&amp; servers.get(i).equals(instanceUrl) </span>
+<span class="nc bnc" id="L331" title="All 8 branches missed.">        				&amp;&amp; i &lt; usernames.size() &amp;&amp; i &lt; apiKeys.size() &amp;&amp; usernames.get(i) != null &amp;&amp; apiKeys.get(i) != null) {</span>
+<span class="nc" id="L332">        			String userInfo = usernames.get(i) + &quot;:&quot; + apiKeys.get(i);</span>
+<span class="nc" id="L333">        			byte[] encodedAuth = Base64.encodeBase64(</span>
+<span class="nc" id="L334">                            userInfo.getBytes(StandardCharsets.US_ASCII));</span>
+<span class="nc" id="L335">                    String authHeader = &quot;Basic &quot; + new String(encodedAuth);           </span>
+<span class="nc" id="L336">                    headers.set(HttpHeaders.AUTHORIZATION, authHeader);         </span>
+        		}
+        	}
+    	}
+<span class="fc" id="L340">    	return headers;</span>
+    }
+    
+    private JSONArray getJsonArray(JSONObject json, String key) {
+<span class="fc" id="L344">        Object array = json.get(key);</span>
+<span class="fc bfc" id="L345" title="All 2 branches covered.">        return array == null ? new JSONArray() : (JSONArray) array;</span>
+    }
+    
+    private String getString(JSONObject json, String key) {
+<span class="fc" id="L349">        return (String) json.get(key);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

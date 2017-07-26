@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>FeatureCollectorTask.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.capitalone.dashboard:gitlab-feature-collector</a> &gt; <a href="index.source.html" class="el_package">com.capitalone.dashboard.collector</a> &gt; <span class="el_source">FeatureCollectorTask.java</span></div><h1>FeatureCollectorTask.java</h1><pre class="source lang-java linenums">package com.capitalone.dashboard.collector;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.TaskScheduler;
+import org.springframework.stereotype.Component;
+import org.springframework.util.concurrent.ListenableFuture;
+import org.springframework.util.concurrent.ListenableFutureCallback;
+
+import com.capitalone.dashboard.gitlab.model.GitlabProject;
+import com.capitalone.dashboard.misc.HygieiaException;
+import com.capitalone.dashboard.model.FeatureCollector;
+import com.capitalone.dashboard.model.UpdateResult;
+import com.capitalone.dashboard.repository.BaseCollectorRepository;
+import com.capitalone.dashboard.repository.FeatureCollectorRepository;
+import com.capitalone.dashboard.util.FeatureCollectorConstants;
+
+/**
+ * Collects {@link FeatureCollector} data from feature content source system.
+ */
+@Component
+public class FeatureCollectorTask extends CollectorTask&lt;FeatureCollector&gt; {
+<span class="fc" id="L30">	private static final Logger LOGGER = LoggerFactory.getLogger(FeatureCollectorTask.class);</span>
+
+	private final FeatureCollectorRepository featureCollectorRepository;
+	private final FeatureSettings featureSettings;
+	private final FeatureService featureService;
+
+	/**
+	 * Default constructor for the collector task. This will construct this
+	 * collector task with all repository, scheduling, and settings
+	 * configurations custom to this collector.
+	 *
+	 * @param taskScheduler
+	 *            A task scheduler artifact
+	 * @param teamRepository
+	 *            The repository being use for feature collection
+	 * @param featureSettings
+	 *            The settings being used for feature collection from the source
+	 *            system
+	 * @throws HygieiaException
+	 */
+	@Autowired
+	public FeatureCollectorTask(TaskScheduler taskScheduler, FeatureCollectorRepository featureCollectorRepository,
+			FeatureSettings featureSettings, FeatureService featureService) throws HygieiaException {
+<span class="fc" id="L53">		super(taskScheduler, FeatureCollectorConstants.GITLAB);</span>
+<span class="fc" id="L54">		this.featureCollectorRepository = featureCollectorRepository;</span>
+<span class="fc" id="L55">		this.featureSettings = featureSettings;</span>
+<span class="fc" id="L56">		this.featureService = featureService;</span>
+<span class="fc" id="L57">	}</span>
+
+	/**
+	 * Accessor method for the collector prototype object
+	 */
+	@Override
+	public FeatureCollector getCollector() {
+<span class="fc" id="L64">		return FeatureCollector.prototype();</span>
+	}
+
+	/**
+	 * Accessor method for the collector repository
+	 */
+	@Override
+	public BaseCollectorRepository&lt;FeatureCollector&gt; getCollectorRepository() {
+<span class="fc" id="L72">		return featureCollectorRepository;</span>
+	}
+
+	/**
+	 * Accessor method for the current chronology setting, for the scheduler
+	 */
+	@Override
+	public String getCron() {
+<span class="fc" id="L80">		return featureSettings.getCron();</span>
+	}
+
+	/**
+	 * The collection action. This is the task which will run on a schedule to
+	 * gather data from the feature content source system and update the
+	 * repository with retrieved data.
+	 */
+	@Override
+	public void collect(FeatureCollector collector) {
+<span class="fc" id="L90">		logBanner(&quot;Starting...&quot;);</span>
+<span class="fc" id="L91">		Long startTime = System.currentTimeMillis();</span>
+<span class="fc" id="L92">		Collection&lt;GitlabProject&gt; projects = featureService.getEnabledProjects(collector.getId());</span>
+
+<span class="fc" id="L94">		ListenableFuture&lt;UpdateResult&gt; updateTeamsFuture = featureService.updateSelectableTeams(collector.getId());</span>
+<span class="fc" id="L95">		updateTeamsFuture.addCallback(createCallback(&quot;Teams Added&quot;, &quot;Teams Deleted&quot;, startTime));</span>
+
+<span class="fc" id="L97">		ListenableFuture&lt;UpdateResult&gt; updateProjectsFuture = featureService.updateProjects(collector.getId());</span>
+<span class="fc" id="L98">		updateProjectsFuture.addCallback(createCallback(&quot;Projects Added&quot;, &quot;Projects Deleted&quot;, startTime));</span>
+
+<span class="fc" id="L100">		List&lt;Future&lt;UpdateResult&gt;&gt; updateIssuesFutures = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">		for (GitlabProject project : projects) {</span>
+<span class="fc" id="L102">			updateIssuesFutures.add(featureService.updateIssuesForProject(collector.getId(), collector.getLastExecuted(), project));</span>
+<span class="fc" id="L103">		}</span>
+<span class="fc" id="L104">		logResults(updateIssuesFutures, startTime);</span>
+<span class="fc" id="L105">	}</span>
+
+	private ListenableFutureCallback&lt;UpdateResult&gt; createCallback(String addedText, String deletedText,
+			Long startTime) {
+<span class="fc" id="L109">		return new ListenableFutureCallback&lt;UpdateResult&gt;() {</span>
+
+			@Override
+			public void onSuccess(UpdateResult result) {
+<span class="nc" id="L113">				log(addedText, startTime, result.getItemsAdded());</span>
+<span class="nc" id="L114">				log(deletedText, startTime, result.getItemsDeleted());</span>
+<span class="nc" id="L115">			}</span>
+
+			@Override
+			public void onFailure(Throwable ex) {
+<span class="nc" id="L119">				log(ex.getMessage());</span>
+<span class="nc" id="L120">			}</span>
+
+		};
+	}
+
+	private void logResults(List&lt;Future&lt;UpdateResult&gt;&gt; futures, long startTime) {
+<span class="fc" id="L126">		UpdateResult result = new UpdateResult(0, 0);</span>
+<span class="fc" id="L127">		futures.forEach(future -&gt; {</span>
+			try {
+<span class="fc" id="L129">				result.add(future.get());</span>
+<span class="fc" id="L130">			} catch (InterruptedException | ExecutionException e) {</span>
+<span class="fc" id="L131">				LOGGER.error(e.getMessage());</span>
+<span class="fc" id="L132">			}</span>
+<span class="fc" id="L133">		});</span>
+
+<span class="fc" id="L135">		log(&quot;Issues Added/Updated&quot;, startTime, result.getItemsAdded());</span>
+<span class="fc" id="L136">		log(&quot;Issues Deleted&quot;, startTime, result.getItemsDeleted());</span>
+<span class="fc" id="L137">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

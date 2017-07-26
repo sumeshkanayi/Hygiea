@@ -1,0 +1,10 @@
+/vagrant/sw/Hygiea/collectors/build/jenkins/src/main/java/com/capitalone/dashboard/model/HudsonCollector.java
+/vagrant/sw/Hygiea/collectors/build/jenkins/src/main/java/com/capitalone/dashboard/collector/HudsonCollectorTask.java
+/vagrant/sw/Hygiea/collectors/build/jenkins/src/main/java/com/capitalone/dashboard/collector/HudsonSettings.java
+/vagrant/sw/Hygiea/collectors/build/jenkins/src/main/java/com/capitalone/dashboard/repository/HudsonCollectorRepository.java
+/vagrant/sw/Hygiea/collectors/build/jenkins/src/main/java/com/capitalone/dashboard/collector/HudsonClient.java
+/vagrant/sw/Hygiea/collectors/build/jenkins/src/main/java/com/capitalone/dashboard/collector/RestOperationsSupplier.java
+/vagrant/sw/Hygiea/collectors/build/jenkins/src/main/java/com/capitalone/dashboard/repository/HudsonJobRepository.java
+/vagrant/sw/Hygiea/collectors/build/jenkins/src/main/java/com/capitalone/dashboard/Application.java
+/vagrant/sw/Hygiea/collectors/build/jenkins/src/main/java/com/capitalone/dashboard/collector/DefaultHudsonClient.java
+/vagrant/sw/Hygiea/collectors/build/jenkins/src/main/java/com/capitalone/dashboard/model/HudsonJob.java

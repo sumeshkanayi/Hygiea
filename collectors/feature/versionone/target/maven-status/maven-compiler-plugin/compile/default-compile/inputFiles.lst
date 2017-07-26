@@ -1,0 +1,12 @@
+/vagrant/sw/Hygiea/collectors/feature/versionone/src/main/java/com/capitalone/dashboard/util/DateUtil.java
+/vagrant/sw/Hygiea/collectors/feature/versionone/src/main/java/com/capitalone/dashboard/collector/ProjectDataClient.java
+/vagrant/sw/Hygiea/collectors/feature/versionone/src/main/java/com/capitalone/dashboard/datafactory/versionone/VersionOneDataFactoryImpl.java
+/vagrant/sw/Hygiea/collectors/feature/versionone/src/main/java/com/capitalone/dashboard/repository/FeatureCollectorRepository.java
+/vagrant/sw/Hygiea/collectors/feature/versionone/src/main/java/com/capitalone/dashboard/collector/FeatureCollectorTask.java
+/vagrant/sw/Hygiea/collectors/feature/versionone/src/main/java/com/capitalone/dashboard/datafactory/versionone/VersionOneDataFactory.java
+/vagrant/sw/Hygiea/collectors/feature/versionone/src/main/java/com/capitalone/dashboard/model/FeatureCollector.java
+/vagrant/sw/Hygiea/collectors/feature/versionone/src/main/java/com/capitalone/dashboard/collector/FeatureSettings.java
+/vagrant/sw/Hygiea/collectors/feature/versionone/src/main/java/com/capitalone/dashboard/collector/TeamDataClient.java
+/vagrant/sw/Hygiea/collectors/feature/versionone/src/main/java/com/capitalone/dashboard/collector/StoryDataClient.java
+/vagrant/sw/Hygiea/collectors/feature/versionone/src/main/java/com/capitalone/dashboard/Application.java
+/vagrant/sw/Hygiea/collectors/feature/versionone/src/main/java/com/capitalone/dashboard/collector/BaseClient.java

@@ -1,0 +1,22 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+com.capitalone.dashboard:gitlab-feature-collector,com.capitalone.dashboard.gitlab,DefaultGitlabClient,0,214,1,13,0,47,1,17,0,11
+com.capitalone.dashboard:gitlab-feature-collector,com.capitalone.dashboard.gitlab,GitlabUriUtility,0,249,0,6,0,39,0,13,0,10
+com.capitalone.dashboard:gitlab-feature-collector,com.capitalone.dashboard,ApplicationConfig,0,7,0,0,0,2,0,2,0,2
+com.capitalone.dashboard:gitlab-feature-collector,com.capitalone.dashboard,Application,8,0,0,0,3,0,2,0,2,0
+com.capitalone.dashboard:gitlab-feature-collector,com.capitalone.dashboard.collector,FeatureSettings.new X509TrustManager() {...},13,0,0,0,5,0,4,0,4,0
+com.capitalone.dashboard:gitlab-feature-collector,com.capitalone.dashboard.collector,FeatureCollectorTask.new ListenableFutureCallback() {...},29,15,0,0,5,1,2,1,2,1
+com.capitalone.dashboard:gitlab-feature-collector,com.capitalone.dashboard.collector,FeatureSettings,82,4,2,0,31,1,17,1,16,1
+com.capitalone.dashboard:gitlab-feature-collector,com.capitalone.dashboard.collector,FeatureService,0,181,0,8,0,35,0,11,0,7
+com.capitalone.dashboard:gitlab-feature-collector,com.capitalone.dashboard.collector,FeatureCollectorTask,0,143,0,2,0,33,0,10,0,9
+com.capitalone.dashboard:gitlab-feature-collector,com.capitalone.dashboard.model,FeatureCollector,0,24,0,0,0,8,0,2,0,2
+com.capitalone.dashboard:gitlab-feature-collector,com.capitalone.dashboard.model,UpdateResult,0,31,0,0,0,9,0,4,0,4
+com.capitalone.dashboard:gitlab-feature-collector,com.capitalone.dashboard.data,FeatureDataMapper,0,319,0,8,0,89,0,11,0,7
+com.capitalone.dashboard:gitlab-feature-collector,com.capitalone.dashboard.data,DefaultFeatureDataClient,3,335,1,21,1,71,1,19,0,9
+com.capitalone.dashboard:gitlab-feature-collector,com.capitalone.dashboard.gitlab.model,GitlabMilestone,36,30,0,0,16,12,10,9,10,9
+com.capitalone.dashboard:gitlab-feature-collector,com.capitalone.dashboard.gitlab.model,GitlabLabel,14,10,0,0,6,4,4,3,4,3
+com.capitalone.dashboard:gitlab-feature-collector,com.capitalone.dashboard.gitlab.model,GitlabNamespace,32,13,0,0,14,5,9,4,9,4
+com.capitalone.dashboard:gitlab-feature-collector,com.capitalone.dashboard.gitlab.model,GitlabProject,11,64,2,4,3,19,4,12,2,11
+com.capitalone.dashboard:gitlab-feature-collector,com.capitalone.dashboard.gitlab.model,GitlabList,14,10,0,0,6,4,4,3,4,3
+com.capitalone.dashboard:gitlab-feature-collector,com.capitalone.dashboard.gitlab.model,GitlabIssue,25,60,1,1,11,23,7,17,6,17
+com.capitalone.dashboard:gitlab-feature-collector,com.capitalone.dashboard.gitlab.model,GitlabTeam,14,17,0,0,6,7,4,5,4,5
+com.capitalone.dashboard:gitlab-feature-collector,com.capitalone.dashboard.gitlab.model,GitlabBoard,7,10,0,0,3,4,2,3,2,3

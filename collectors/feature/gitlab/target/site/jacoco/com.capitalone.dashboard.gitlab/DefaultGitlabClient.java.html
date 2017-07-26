@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DefaultGitlabClient.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.capitalone.dashboard:gitlab-feature-collector</a> &gt; <a href="index.source.html" class="el_package">com.capitalone.dashboard.gitlab</a> &gt; <span class="el_source">DefaultGitlabClient.java</span></div><h1>DefaultGitlabClient.java</h1><pre class="source lang-java linenums">package com.capitalone.dashboard.gitlab;
+
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestOperations;
+
+import com.capitalone.dashboard.gitlab.model.GitlabBoard;
+import com.capitalone.dashboard.gitlab.model.GitlabIssue;
+import com.capitalone.dashboard.gitlab.model.GitlabLabel;
+import com.capitalone.dashboard.gitlab.model.GitlabList;
+import com.capitalone.dashboard.gitlab.model.GitlabProject;
+import com.capitalone.dashboard.gitlab.model.GitlabTeam;
+
+@Component
+public class DefaultGitlabClient implements GitlabClient {
+	
+	private static final String PAGINATION_HEADER = &quot;X-Next-Page&quot;;
+	
+	private final RestOperations restOperations;
+	private final GitlabUriUtility urlUtility;
+	
+	@Autowired
+<span class="fc" id="L33">	public DefaultGitlabClient(RestOperations restOperations, GitlabUriUtility urlUtility) {</span>
+<span class="fc" id="L34">		this.restOperations = restOperations;</span>
+<span class="fc" id="L35">		this.urlUtility = urlUtility;</span>
+<span class="fc" id="L36">	}</span>
+
+	@Override
+	public List&lt;GitlabTeam&gt; getTeams() {
+<span class="fc" id="L40">		URI gitlabTeamUri = urlUtility.buildTeamsUri();</span>
+<span class="fc" id="L41">		return makePaginatedGitlabRequest(gitlabTeamUri, GitlabTeam[].class);</span>
+	}
+	
+	@Override
+	public List&lt;GitlabProject&gt; getProjects() {
+<span class="fc" id="L46">		URI uri = urlUtility.buildProjectsUri();</span>
+<span class="fc" id="L47">		return makePaginatedGitlabRequest(uri, GitlabProject[].class);</span>
+	}
+	
+    @Override
+    public List&lt;GitlabProject&gt; getProjectsForTeam(String teamId) {
+<span class="fc" id="L52">        URI uri = urlUtility.buildProjectsForTeamUri(teamId);</span>
+<span class="fc" id="L53">        return makePaginatedGitlabRequest(uri, GitlabProject[].class);</span>
+    }
+    
+    @Override
+    public GitlabProject getProjectById(String projectId) {
+<span class="fc" id="L58">        URI uri = urlUtility.buildProjectsByIdUri(projectId);</span>
+<span class="fc" id="L59">        HttpEntity&lt;String&gt; headersEntity = urlUtility.buildAuthenticationHeader();</span>
+<span class="fc" id="L60">        return restOperations.exchange(uri, HttpMethod.GET, headersEntity, GitlabProject.class).getBody();</span>
+    }
+	
+	@Override
+	public List&lt;GitlabLabel&gt; getInProgressLabelsForProject(Long projectId) {
+<span class="fc" id="L65">		List&lt;GitlabLabel&gt; labels = new ArrayList&lt;&gt;();		</span>
+<span class="fc" id="L66">		List&lt;GitlabBoard&gt; boards = getBoardsForProject(String.valueOf(projectId));	</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">		for (GitlabBoard board : boards) {</span>
+<span class="fc" id="L68">			 labels.addAll(getLabelsForInProgressIssues(board));</span>
+<span class="fc" id="L69">		}</span>
+		
+<span class="fc" id="L71">		return labels;</span>
+	}
+	
+	@Override
+	public List&lt;GitlabIssue&gt; getIssuesForProject(GitlabProject project) {
+<span class="fc" id="L76">		URI uri = urlUtility.buildIssuesForProjectUri(String.valueOf(project.getId()));</span>
+<span class="fc" id="L77">		List&lt;GitlabIssue&gt; issues = makePaginatedGitlabRequest(uri, GitlabIssue[].class);</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">		for(GitlabIssue issue : issues) {</span>
+<span class="fc" id="L79">			issue.setProject(project);</span>
+<span class="fc" id="L80">		}</span>
+<span class="fc" id="L81">		return issues;</span>
+	}
+	
+	@SuppressWarnings({ &quot;unchecked&quot;, &quot;rawtypes&quot; })
+	private &lt;T&gt; List&lt;T&gt; makePaginatedGitlabRequest(URI uri, Class gitlabResponseType) {
+<span class="fc" id="L86">		URI restUri = uri;</span>
+<span class="fc" id="L87">		HttpEntity&lt;String&gt; headersEntity = urlUtility.buildAuthenticationHeader();</span>
+		
+<span class="fc" id="L89">		List&lt;T&gt; body =  new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L90">		boolean hasNextPage = true;</span>
+<span class="fc bfc" id="L91" title="All 2 branches covered.">		while (hasNextPage) {</span>
+<span class="fc" id="L92">			ResponseEntity&lt;T[]&gt; response = restOperations.exchange(restUri, HttpMethod.GET, headersEntity, gitlabResponseType);</span>
+<span class="fc" id="L93">			CollectionUtils.addAll(body, response.getBody());</span>
+			
+<span class="fc bfc" id="L95" title="All 2 branches covered.">			if(hasNextPage = hasNextPage(response.getHeaders())) {</span>
+<span class="fc" id="L96">				restUri = urlUtility.updatePage(restUri, response.getHeaders().get(PAGINATION_HEADER).get(0));</span>
+			}
+<span class="fc" id="L98">		}</span>
+		
+<span class="fc" id="L100">		return body;</span>
+	}
+
+	private List&lt;GitlabLabel&gt; getLabelsForInProgressIssues(GitlabBoard board) {
+<span class="fc" id="L104">		List&lt;GitlabLabel&gt; labels = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L105" title="All 2 branches covered.">		for (GitlabList list : board.getLists()) {</span>
+<span class="fc" id="L106">			labels.add(list.getLabel());</span>
+<span class="fc" id="L107">		}</span>
+<span class="fc" id="L108">		return labels;</span>
+	}
+
+	private List&lt;GitlabBoard&gt; getBoardsForProject(String projectId) {
+<span class="fc" id="L112">		URI gitlabBoardsUrl = urlUtility.buildBoardsUri(projectId);</span>
+<span class="fc" id="L113">		return makePaginatedGitlabRequest(gitlabBoardsUrl, GitlabBoard[].class);</span>
+	}
+	
+	private boolean hasNextPage(HttpHeaders headers) {
+<span class="pc bpc" id="L117" title="1 of 4 branches missed.">		if (null == headers || CollectionUtils.isEmpty(headers.get(PAGINATION_HEADER))) {</span>
+<span class="fc" id="L118">			return false;</span>
+		}
+<span class="fc" id="L120">		String nextPage = headers.get(PAGINATION_HEADER).get(0);</span>
+<span class="fc" id="L121">		return StringUtils.isNotBlank(nextPage);</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

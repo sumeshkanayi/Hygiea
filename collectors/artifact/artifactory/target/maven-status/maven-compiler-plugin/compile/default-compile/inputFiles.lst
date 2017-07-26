@@ -1,0 +1,11 @@
+/vagrant/sw/Hygiea/collectors/artifact/artifactory/src/main/java/com/capitalone/dashboard/collector/DefaultArtifactoryClient.java
+/vagrant/sw/Hygiea/collectors/artifact/artifactory/src/main/java/com/capitalone/dashboard/util/ArtifactUtil.java
+/vagrant/sw/Hygiea/collectors/artifact/artifactory/src/main/java/com/capitalone/dashboard/model/ArtifactoryCollector.java
+/vagrant/sw/Hygiea/collectors/artifact/artifactory/src/main/java/com/capitalone/dashboard/model/ArtifactoryRepo.java
+/vagrant/sw/Hygiea/collectors/artifact/artifactory/src/main/java/com/capitalone/dashboard/Application.java
+/vagrant/sw/Hygiea/collectors/artifact/artifactory/src/main/java/com/capitalone/dashboard/repository/ArtifactoryCollectorRepository.java
+/vagrant/sw/Hygiea/collectors/artifact/artifactory/src/main/java/com/capitalone/dashboard/repository/ArtifactoryRepoRepository.java
+/vagrant/sw/Hygiea/collectors/artifact/artifactory/src/main/java/com/capitalone/dashboard/collector/ArtifactoryClient.java
+/vagrant/sw/Hygiea/collectors/artifact/artifactory/src/main/java/com/capitalone/dashboard/collector/ArtifactoryCollectorTask.java
+/vagrant/sw/Hygiea/collectors/artifact/artifactory/src/main/java/com/capitalone/dashboard/collector/RestOperationsSupplier.java
+/vagrant/sw/Hygiea/collectors/artifact/artifactory/src/main/java/com/capitalone/dashboard/collector/ArtifactorySettings.java

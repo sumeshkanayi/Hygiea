@@ -1,0 +1,9 @@
+/vagrant/sw/Hygiea/collectors/cmdb/hpsm/src/main/java/com/capitalone/dashboard/collector/HpsmCollectorTask.java
+/vagrant/sw/Hygiea/collectors/cmdb/hpsm/src/main/java/com/capitalone/dashboard/Application.java
+/vagrant/sw/Hygiea/collectors/cmdb/hpsm/src/main/java/com/capitalone/dashboard/collector/HpsmSettings.java
+/vagrant/sw/Hygiea/collectors/cmdb/hpsm/src/main/java/com/capitalone/dashboard/collector/HpsmClient.java
+/vagrant/sw/Hygiea/collectors/cmdb/hpsm/src/main/java/com/capitalone/dashboard/collector/RestOperationsSupplier.java
+/vagrant/sw/Hygiea/collectors/cmdb/hpsm/src/main/java/com/capitalone/dashboard/model/HpsmSoapModel.java
+/vagrant/sw/Hygiea/collectors/cmdb/hpsm/src/main/java/com/capitalone/dashboard/model/HpsmCollector.java
+/vagrant/sw/Hygiea/collectors/cmdb/hpsm/src/main/java/com/capitalone/dashboard/repository/HpsmRepository.java
+/vagrant/sw/Hygiea/collectors/cmdb/hpsm/src/main/java/com/capitalone/dashboard/collector/DefaultHpsmClient.java

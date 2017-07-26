@@ -1,0 +1,8 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+com.capitalone.dashboard:hpsm-cmdb-collector,com.capitalone.dashboard,Application,8,0,0,0,3,0,2,0,2,0
+com.capitalone.dashboard:hpsm-cmdb-collector,com.capitalone.dashboard.collector,HpsmCollectorTask,37,140,6,8,10,35,8,6,3,4
+com.capitalone.dashboard:hpsm-cmdb-collector,com.capitalone.dashboard.collector,RestOperationsSupplier,18,0,0,0,5,0,2,0,2,0
+com.capitalone.dashboard:hpsm-cmdb-collector,com.capitalone.dashboard.collector,DefaultHpsmClient,832,0,68,0,183,0,49,0,15,0
+com.capitalone.dashboard:hpsm-cmdb-collector,com.capitalone.dashboard.collector,HpsmSettings,129,0,0,0,55,0,37,0,37,0
+com.capitalone.dashboard:hpsm-cmdb-collector,com.capitalone.dashboard.model,HpsmSoapModel,45,0,0,0,19,0,13,0,13,0
+com.capitalone.dashboard:hpsm-cmdb-collector,com.capitalone.dashboard.model,HpsmCollector,0,21,0,0,0,7,0,2,0,2

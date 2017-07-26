@@ -1,0 +1,5 @@
+/vagrant/sw/Hygiea/collectors/scm/gitlab/src/test/java/com/capitalone/dashboard/collector/DefaultGitlabGitClientTest.java
+/vagrant/sw/Hygiea/collectors/scm/gitlab/src/test/java/com/capitalone/dashboard/model/GitlabGitRepoTest.java
+/vagrant/sw/Hygiea/collectors/scm/gitlab/src/test/java/com/capitalone/dashboard/collector/GitlabUrlUtilityTest.java
+/vagrant/sw/Hygiea/collectors/scm/gitlab/src/test/java/com/capitalone/dashboard/collector/GitlabGitCollectorTaskTest.java
+/vagrant/sw/Hygiea/collectors/scm/gitlab/src/test/java/com/capitalone/dashboard/collector/GitlabCommitsResponseMapperTest.java

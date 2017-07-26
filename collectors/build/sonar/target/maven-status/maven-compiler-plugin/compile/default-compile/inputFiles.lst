@@ -1,0 +1,13 @@
+/vagrant/sw/Hygiea/collectors/build/sonar/src/main/java/com/capitalone/dashboard/collector/SonarClient.java
+/vagrant/sw/Hygiea/collectors/build/sonar/src/main/java/com/capitalone/dashboard/util/SonarDashboardUrl.java
+/vagrant/sw/Hygiea/collectors/build/sonar/src/main/java/com/capitalone/dashboard/collector/RestOperationsSupplier.java
+/vagrant/sw/Hygiea/collectors/build/sonar/src/main/java/com/capitalone/dashboard/collector/DefaultSonar6Client.java
+/vagrant/sw/Hygiea/collectors/build/sonar/src/main/java/com/capitalone/dashboard/model/SonarCollector.java
+/vagrant/sw/Hygiea/collectors/build/sonar/src/main/java/com/capitalone/dashboard/repository/SonarProjectRepository.java
+/vagrant/sw/Hygiea/collectors/build/sonar/src/main/java/com/capitalone/dashboard/collector/DefaultSonarClient.java
+/vagrant/sw/Hygiea/collectors/build/sonar/src/main/java/com/capitalone/dashboard/collector/SonarCollectorTask.java
+/vagrant/sw/Hygiea/collectors/build/sonar/src/main/java/com/capitalone/dashboard/model/SonarProject.java
+/vagrant/sw/Hygiea/collectors/build/sonar/src/main/java/com/capitalone/dashboard/collector/SonarClientSelector.java
+/vagrant/sw/Hygiea/collectors/build/sonar/src/main/java/com/capitalone/dashboard/repository/SonarCollectorRepository.java
+/vagrant/sw/Hygiea/collectors/build/sonar/src/main/java/com/capitalone/dashboard/collector/SonarSettings.java
+/vagrant/sw/Hygiea/collectors/build/sonar/src/main/java/com/capitalone/dashboard/Application.java

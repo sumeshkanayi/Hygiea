@@ -1,0 +1,8 @@
+/vagrant/sw/Hygiea/collectors/misc/chat-ops/src/main/java/com/capitalone/dashboard/collector/ChatOpsClient.java
+/vagrant/sw/Hygiea/collectors/misc/chat-ops/src/main/java/com/capitalone/dashboard/collector/ChatOpsSettings.java
+/vagrant/sw/Hygiea/collectors/misc/chat-ops/src/main/java/com/capitalone/dashboard/collector/RestOperationsSupplier.java
+/vagrant/sw/Hygiea/collectors/misc/chat-ops/src/main/java/com/capitalone/dashboard/collector/ChatOpsCollectorTask.java
+/vagrant/sw/Hygiea/collectors/misc/chat-ops/src/main/java/com/capitalone/dashboard/model/ChatOpsRepo.java
+/vagrant/sw/Hygiea/collectors/misc/chat-ops/src/main/java/com/capitalone/dashboard/repository/ChatOpsRepository.java
+/vagrant/sw/Hygiea/collectors/misc/chat-ops/src/main/java/com/capitalone/dashboard/Application.java
+/vagrant/sw/Hygiea/collectors/misc/chat-ops/src/main/java/com/capitalone/dashboard/collector/DefaultChatOpsClient.java

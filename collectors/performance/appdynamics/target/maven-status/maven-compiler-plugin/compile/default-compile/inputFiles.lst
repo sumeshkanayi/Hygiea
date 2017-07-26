@@ -1,0 +1,10 @@
+/vagrant/sw/Hygiea/collectors/performance/appdynamics/src/main/java/com/capitalone/dashboard/model/AppdynamicsCollector.java
+/vagrant/sw/Hygiea/collectors/performance/appdynamics/src/main/java/com/capitalone/dashboard/collector/AppdynamicsCollectorTask.java
+/vagrant/sw/Hygiea/collectors/performance/appdynamics/src/main/java/com/capitalone/dashboard/repository/AppDynamicsApplicationRepository.java
+/vagrant/sw/Hygiea/collectors/performance/appdynamics/src/main/java/com/capitalone/dashboard/repository/AppdynamicsCollectorRepository.java
+/vagrant/sw/Hygiea/collectors/performance/appdynamics/src/main/java/com/capitalone/dashboard/collector/RestOperationsSupplier.java
+/vagrant/sw/Hygiea/collectors/performance/appdynamics/src/main/java/com/capitalone/dashboard/collector/DefaultAppdynamicsClient.java
+/vagrant/sw/Hygiea/collectors/performance/appdynamics/src/main/java/com/capitalone/dashboard/collector/AppdynamicsClient.java
+/vagrant/sw/Hygiea/collectors/performance/appdynamics/src/main/java/com/capitalone/dashboard/model/AppdynamicsApplication.java
+/vagrant/sw/Hygiea/collectors/performance/appdynamics/src/main/java/com/capitalone/dashboard/Application.java
+/vagrant/sw/Hygiea/collectors/performance/appdynamics/src/main/java/com/capitalone/dashboard/collector/AppdynamicsSettings.java

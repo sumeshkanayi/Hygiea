@@ -1,0 +1,8 @@
+/vagrant/sw/Hygiea/collectors/cloud/aws/src/main/java/com/capitalone/dashboard/collector/AWSCloudCollectorTask.java
+/vagrant/sw/Hygiea/collectors/cloud/aws/src/main/java/com/capitalone/dashboard/collector/AWSCloudSettings.java
+/vagrant/sw/Hygiea/collectors/cloud/aws/src/main/java/com/capitalone/dashboard/repository/AWSConfigRepository.java
+/vagrant/sw/Hygiea/collectors/cloud/aws/src/main/java/com/capitalone/dashboard/Application.java
+/vagrant/sw/Hygiea/collectors/cloud/aws/src/main/java/com/capitalone/dashboard/repository/package-info.java
+/vagrant/sw/Hygiea/collectors/cloud/aws/src/main/java/com/capitalone/dashboard/collector/AWSCloudClient.java
+/vagrant/sw/Hygiea/collectors/cloud/aws/src/main/java/com/capitalone/dashboard/collector/AWSCloudCollector.java
+/vagrant/sw/Hygiea/collectors/cloud/aws/src/main/java/com/capitalone/dashboard/collector/DefaultAWSCloudClient.java

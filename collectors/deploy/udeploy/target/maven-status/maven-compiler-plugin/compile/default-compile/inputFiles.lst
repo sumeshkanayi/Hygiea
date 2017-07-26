@@ -1,0 +1,12 @@
+/vagrant/sw/Hygiea/collectors/deploy/udeploy/src/main/java/com/capitalone/dashboard/collector/DefaultUDeployClient.java
+/vagrant/sw/Hygiea/collectors/deploy/udeploy/src/main/java/com/capitalone/dashboard/collector/UDeployCollectorTask.java
+/vagrant/sw/Hygiea/collectors/deploy/udeploy/src/main/java/com/capitalone/dashboard/collector/UDeploySettings.java
+/vagrant/sw/Hygiea/collectors/deploy/udeploy/src/main/java/com/capitalone/dashboard/repository/UDeployApplicationRepository.java
+/vagrant/sw/Hygiea/collectors/deploy/udeploy/src/main/java/com/capitalone/dashboard/model/UDeployCollector.java
+/vagrant/sw/Hygiea/collectors/deploy/udeploy/src/main/java/com/capitalone/dashboard/repository/UDeployCollectorRepository.java
+/vagrant/sw/Hygiea/collectors/deploy/udeploy/src/main/java/com/capitalone/dashboard/model/UDeployApplication.java
+/vagrant/sw/Hygiea/collectors/deploy/udeploy/src/main/java/com/capitalone/dashboard/model/Environment.java
+/vagrant/sw/Hygiea/collectors/deploy/udeploy/src/main/java/com/capitalone/dashboard/Application.java
+/vagrant/sw/Hygiea/collectors/deploy/udeploy/src/main/java/com/capitalone/dashboard/collector/UDeployClient.java
+/vagrant/sw/Hygiea/collectors/deploy/udeploy/src/main/java/com/capitalone/dashboard/model/UDeployEnvResCompData.java
+/vagrant/sw/Hygiea/collectors/deploy/udeploy/src/main/java/com/capitalone/dashboard/collector/RestOperationsSupplier.java

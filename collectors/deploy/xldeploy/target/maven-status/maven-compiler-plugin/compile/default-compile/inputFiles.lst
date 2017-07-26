@@ -1,0 +1,14 @@
+/vagrant/sw/Hygiea/collectors/deploy/xldeploy/src/main/java/com/capitalone/dashboard/repository/XLDeployApplicationRepository.java
+/vagrant/sw/Hygiea/collectors/deploy/xldeploy/src/main/java/com/capitalone/dashboard/collector/XLDeploySettings.java
+/vagrant/sw/Hygiea/collectors/deploy/xldeploy/src/main/java/com/capitalone/dashboard/model/XLDeployApplicationHistoryItem.java
+/vagrant/sw/Hygiea/collectors/deploy/xldeploy/src/main/java/com/capitalone/dashboard/collector/RestOperationsSupplier.java
+/vagrant/sw/Hygiea/collectors/deploy/xldeploy/src/main/java/com/capitalone/dashboard/repository/XLDeployCollectorRepository.java
+/vagrant/sw/Hygiea/collectors/deploy/xldeploy/src/main/java/com/capitalone/dashboard/collector/DefaultXLDeployClient.java
+/vagrant/sw/Hygiea/collectors/deploy/xldeploy/src/main/java/com/capitalone/dashboard/model/ConfigurationItemId.java
+/vagrant/sw/Hygiea/collectors/deploy/xldeploy/src/main/java/com/capitalone/dashboard/model/Environment.java
+/vagrant/sw/Hygiea/collectors/deploy/xldeploy/src/main/java/com/capitalone/dashboard/model/XLDeployApplication.java
+/vagrant/sw/Hygiea/collectors/deploy/xldeploy/src/main/java/com/capitalone/dashboard/repository/XLDeployEnvironmentComponentRepository.java
+/vagrant/sw/Hygiea/collectors/deploy/xldeploy/src/main/java/com/capitalone/dashboard/Application.java
+/vagrant/sw/Hygiea/collectors/deploy/xldeploy/src/main/java/com/capitalone/dashboard/collector/XLDeployClient.java
+/vagrant/sw/Hygiea/collectors/deploy/xldeploy/src/main/java/com/capitalone/dashboard/collector/XLDeployCollectorTask.java
+/vagrant/sw/Hygiea/collectors/deploy/xldeploy/src/main/java/com/capitalone/dashboard/model/XLDeployCollector.java
